@@ -1,0 +1,14 @@
+/* Make sure the root container spans the full viewport */
+.app {
+    padding: 1rem; /* Adjust padding as needed */
+    width: 100vw; /* Full width */
+    height: 100vh; /* Full height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Ensuring the Routes' content takes full width */
+  
+  /* Optional: Add styles for any other components to ensure full width */
+  
