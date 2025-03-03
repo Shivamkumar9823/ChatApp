@@ -6,24 +6,28 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { setOtherUsers, setSelectedUser,setAuthUser } from '../redux/userSlice';
+import { useSocket } from "../storeContext/SocketContext";
+
 
 const Sidebar = () => {
    const [search, setSearch] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
+  const { token } = useSocket();
 
 
   useGetotherUser(); //fetching all other users;
   const { otherUsers } = useSelector(store => store.user); //importing otherUsers to use get data from it;
-  if (!otherUsers) {
-    return null;
-  }
+  // if (!otherUsers) {
+  //   return null;
+  // }
 
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/v1/user/logout');
+      const res = await axios.get(`${API_URL}/api/v1/user/logout`);
       navigate("/login");
       dispatch(setAuthUser(null));
       toast.success(res.data.message);
@@ -70,30 +74,42 @@ const Sidebar = () => {
 
 {/* =========================================== other users ============================================================*/}
       <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
-        <ul>
-          {otherUsers.map((user) => (
-            <li
-              onClick={() => selectedUserHandler(user)}
-              key={user._id}
-              className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer 
-                ${selectedUserId === user._id ? 'bg-white text-gray-900' : 'hover:bg-gray-800'}`}
-            >
-              <img
-                src={user.profilephoto}
-                alt={user.fullname}
-                className="w-12 h-12 rounded-full object-cover"
-              />
-              <span className="text-lg">{user.fullname}</span>
-            </li>
-          ))}
-        </ul>
+      {token && Array.isArray(otherUsers) && otherUsers.length > 0 ? (
+  <ul>
+    {otherUsers.map((user) => (
+      <li
+        onClick={() => selectedUserHandler(user)}
+        key={user._id}
+        className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer 
+          ${selectedUserId === user._id ? 'bg-white text-gray-900' : 'hover:bg-gray-800'}`}
+      >
+        <img
+          src={user.profilephoto}
+          alt={user.fullname}
+          className="w-12 h-12 rounded-full object-cover"
+        />
+        <span className="text-lg">{user.fullname}</span>
+      </li>
+    ))}
+  </ul>
+) : null}
+
+
       </div>
 
 
       {/* =========================logout button =============================================================== */}
-      <div className='mt-auto'>
-        <button onClick={logoutHandler} className='w-full btn bg-sky-500 hover:bg-sky-600 text-white'>Logout</button>
-      </div>
+      <div className="mt-auto">
+            {token ? (
+                <button onClick={logoutHandler} className="w-full btn bg-sky-500 hover:bg-sky-600 text-white">
+                    Logout
+                </button>
+            ) : (
+                <button onClick={() => navigate("/login")} className="w-full btn bg-green-500 hover:bg-green-600 text-white">
+                    Login / Sign Up
+                </button>
+            )}
+        </div>
     </div>
   );
 };

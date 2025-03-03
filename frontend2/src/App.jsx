@@ -9,7 +9,7 @@ import { useSocket } from "./storeContext/SocketContext.jsx";
 import { setOnlineUsers } from "./redux/userSlice.js";
 
 function App() {
-  const socket = useSocket(); 
+  const { socket } = useSocket(); 
   const dispatch = useDispatch();
   const { authUser } = useSelector((store) => store.user);
   console.log("authUser: ",authUser)

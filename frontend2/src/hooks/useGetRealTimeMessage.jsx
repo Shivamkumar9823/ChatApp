@@ -5,7 +5,7 @@ import { useSocket } from "../storeContext/SocketContext.jsx";
 
 
 const useGetRealTimeMessage = () => {
-    const socket = useSocket(); 
+    const {socket} = useSocket(); 
     const dispatch = useDispatch();
     const { messages } = useSelector(store => store.message);
 

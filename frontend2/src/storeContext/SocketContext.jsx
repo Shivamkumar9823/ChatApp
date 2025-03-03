@@ -7,14 +7,16 @@ const SocketContext = createContext(null);
 export const SocketProvider = ({ children }) => {
   const { authUser } = useSelector((store) => store.user);
   const [socket, setSocket] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
+  const [token, setToken] = useState("");
 
   useEffect(() => {
     if (authUser) {
-      const newSocket = io("http://localhost:8080", {
+      const newSocket = io(API_URL, {
         transports: ["websocket", "polling"],
         withCredentials: true,
         query: { userId: authUser._id },
-      });
+    });
 
       setSocket(newSocket);
 
@@ -25,8 +27,21 @@ export const SocketProvider = ({ children }) => {
     }
   }, [authUser]);
 
+  useEffect(()=>{
+    async function loadData(){
+           if(localStorage.getItem("token")){
+            setToken(localStorage.getItem("token"));
+        }
+           if(localStorage.getItem("socket")){
+            setSocket(localStorage.getItem("socket"));
+        }
+    }
+    loadData(); 
+ },[])
+
+
   return (
-    <SocketContext.Provider value={socket}>
+    <SocketContext.Provider value={{socket,token,setToken}}>
         {children}
     </SocketContext.Provider>
   );

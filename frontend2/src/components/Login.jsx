@@ -5,12 +5,15 @@ import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { setAuthUser } from '../redux/userSlice';
 import Cookies from 'js-cookie'; 
+import { useSocket } from "../storeContext/SocketContext";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
     username: '',
     password: '',
   });
+  const API_URL = import.meta.env.VITE_API_URL;
+  const {token, setToken } = useSocket();
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,24 +28,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8080/api/v1/user/login", credentials,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true
-        }
-      );
-
-      // console.log("login res.data: ",res.data);
+      const res = await axios.post(`${API_URL}/api/v1/user/login`, credentials);
       if (res.data.success) {
+        setToken(res.data.token);
+        localStorage.setItem("token", res.data.token);
+        console.log("token:",res.data.token)
         toast.success(res.data.message);
-        dispatch(setAuthUser(res.data));
         navigate('/');
       }
     }
     catch (error) {
-          toast.error(error.response.data.message)
+          toast.error("Something went wrong!")
           console.error("Error during signup:", error);
     }
     setCredentials({

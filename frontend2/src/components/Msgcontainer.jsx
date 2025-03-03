@@ -13,6 +13,7 @@ const MsgContainer = () => {
   const dispatch = useDispatch();
   const messagesEndRef = useRef(null);
   const isOnline = onlineUsers?.includes(selectedUser?._id);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // ✅ Fetch previous messages
   useGetMessages();
@@ -38,11 +39,11 @@ const MsgContainer = () => {
     e.preventDefault();
     try {
         if (newMessage.trim() !== "") {
-            const res = await axios.post(
-                `http://localhost:8080/api/v1/message/send/${selectedUser?._id}`,
-                { message: newMessage },
-                { withCredentials: true }
-            );
+          const res = await axios.post(
+            `${API_URL}/api/v1/message/send/${selectedUser?._id}`,
+            { message: newMessage },
+            { withCredentials: true }
+        );
 
             if (res?.data?.newMessage) {
                 const updatedMessages = [...messages, res?.data?.newMessage];

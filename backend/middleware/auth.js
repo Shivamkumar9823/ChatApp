@@ -1,24 +1,26 @@
 import jwt from "jsonwebtoken"
 
-const isAuthenticated = async(req, res, next)=>{
-    try {
-        const token = req.cookies.token;
-        if(!token){
-            return res.status(401).json({
-                message:"User not authenticated."
-            })
-        };
-        const decode = await jwt.verify(token, process.env.JWT_SECRET_KEY);
-        if(!decode){
-            return res.status(401).json({message:"Invalid token!"});
-        }
-        req.id = decode.userId;  //inserting userid Into the req;
-        next();
-    } catch (error) {
-        console.log(error);
+
+const authMiddleware = async(req, res, next) =>{
+    const { token } = req.headers;
+    if(!token){
+        return res.json({success:false, message:"Not Authorized login again"});
     }
+
+    try{
+        const token_decode = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("token_decode: ",token_decode)
+        req.body.userId = token_decode.id; //inserting userId in body
+        next();
+    }
+    catch(error){
+        console.log(error);
+        res.json({success:false,message:"Error"});
+        
+    };
+    
+
+
 }
 
-export default isAuthenticated;
-
- 
+export default authMiddleware;
