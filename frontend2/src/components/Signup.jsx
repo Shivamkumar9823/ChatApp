@@ -12,6 +12,7 @@ const Signup = () => {
     confirmPassword: "",
     gender: "",
   });
+  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,14 +40,14 @@ const Signup = () => {
       return;
     }
    try {
-     const res = await axios.post("http://localhost:8080/api/v1/user/register",user,
+    const res = await axios.post(`${API_URL}/api/v1/user/register`, user,
       {
-        headers:{
-        'Content-Type':'application/json'
-       },
-       withCredentials: true
-    }
-     );
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          withCredentials: true
+      }
+  );
      if(res.data.success ){
          toast.success(res.data.messsage);
          navigate('/');

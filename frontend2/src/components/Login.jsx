@@ -11,6 +11,7 @@ const Login = () => {
     username: '',
     password: '',
   });
+  const API_URL = import.meta.env.VITE_API_URL;
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,14 +26,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8080/api/v1/user/login", credentials,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true
-        }
-      );
+      const res = await axios.post(`${API_URL}/api/v1/user/login`, credentials, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      });
 
       // console.log("login res.data: ",res.data);
       if (res.data.success) {
