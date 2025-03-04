@@ -17,9 +17,9 @@ const Sidebar = () => {
 
   useGetotherUser(); //fetching all other users;
   const { otherUsers } = useSelector(store => store.user); //importing otherUsers to use get data from it;
-  if (!otherUsers) {
-    return null;
-  }
+  // if (!otherUsers) {
+  //   return null;
+  // }
 
 
   const logoutHandler = async () => {
@@ -72,7 +72,7 @@ const Sidebar = () => {
 {/* =========================================== other users ============================================================*/}
       <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
         <ul>
-          {otherUsers.map((user) => (
+          {otherUsers && otherUsers.map((user) => (
             <li
               onClick={() => selectedUserHandler(user)}
               key={user._id}
@@ -92,9 +92,25 @@ const Sidebar = () => {
 
 
       {/* =========================logout button =============================================================== */}
-      <div className='mt-auto'>
-        <button onClick={logoutHandler} className='w-full btn bg-sky-500 hover:bg-sky-600 text-white'>Logout</button>
-      </div>
+      <div className="mt-auto">
+  {otherUsers?.length > 0 ? (
+    <button 
+      onClick={logoutHandler} 
+      className="w-full btn bg-sky-500 hover:bg-sky-600 text-white"
+    >
+      Logout
+    </button>
+  ) : (
+    <div className="flex gap-2">
+      <button 
+        onClick={() => navigate("/login")} 
+        className="w-full btn bg-green-500 hover:bg-green-600 text-white"
+      >
+        Login
+      </button>
+    </div>
+  )}
+</div>
     </div>
   );
 };
