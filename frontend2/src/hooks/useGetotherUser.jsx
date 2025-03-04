@@ -10,8 +10,9 @@ const useGetotherUser = () => {
     useEffect(()=>{
         const fetchOtherUsers = async ()=>{
             try {
-                axios.defaults.withCredentials = true;  // else user not authenticated shown; as is a protected api;
-                const res = await axios.get(`${API_URL}/api/v1/user`);
+                const res = await axios.get(`${API_URL}/api/v1/user`, {
+                    withCredentials: true
+                });                
                 console.log("otherUsers : ",res);
                 dispatch(setOtherUsers(res.data));
             } catch (error) {
