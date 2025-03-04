@@ -19,7 +19,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173", 
+    origin: [
+      "http://localhost:5173",
+      "https://chatapp-frontend-xg13.onrender.com"
+    ],
     credentials: true, // Allow credentials (cookies)
   })
 );
@@ -38,7 +41,10 @@ app.get("/", (req, res) => {
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin:[
+      "http://localhost:5173",
+      "https://chatapp-frontend-xg13.onrender.com"
+    ],
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -73,7 +79,7 @@ io.on("connection", (socket) => {
 
 
 server.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on :${port}`);
 });
 
 export { app, io, server };
