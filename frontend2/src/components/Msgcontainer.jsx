@@ -37,12 +37,16 @@ const MsgContainer = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token"); 
     try {
         if (newMessage.trim() !== "") {
           const res = await axios.post(
             `${API_URL}/api/v1/message/send/${selectedUser?._id}`,
             { message: newMessage },
-            { withCredentials: true }
+            {
+                headers: { Authorization: `Bearer ${token}` }, // Attach token
+                withCredentials: true
+            }
         );
 
             if (res?.data?.newMessage) {

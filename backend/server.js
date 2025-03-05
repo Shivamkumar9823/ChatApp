@@ -13,55 +13,22 @@ dotenv.config({});
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Comprehensive CORS Configuration
+// CORS Configuration
 const corsOptions = {
   origin: [
     "http://localhost:5173",
     "https://chatapp-frontend-xg13.onrender.com"
   ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type', 
-    'Authorization', 
-    'Access-Control-Allow-Credentials'
-  ]
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 };
 
 // Middleware
 app.use(urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-
-// CORS Middleware with Dynamic Origin Handling
-app.use((req, res, next) => {
-  const allowedOrigins = [
-    "http://localhost:5173",
-    "https://chatapp-frontend-xg13.onrender.com"
-  ];
-  const origin = req.headers.origin;
-
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header(
-    'Access-Control-Allow-Headers', 
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-  );
-  
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
-    return res.status(200).json({});
-  }
-  
-  next();
-});
-
-// Apply CORS
-app.use(cors(corsOptions));
+app.use(cors(corsOptions));  // Only one CORS middleware
 
 // Database Connection
 connectDB();
