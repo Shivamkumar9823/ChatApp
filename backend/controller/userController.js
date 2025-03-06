@@ -34,7 +34,7 @@ export const register = async(req,res) =>{
         
         const newuser =  await newUser.save();
         const token = jwt.sign({id: newuser._id}, process.env.JWT_SECRET_KEY);
-        return res.status(201).cookie("token",token,{maxAge:1*24*60*60*1000, httpOnly:true, secure:true, sameSite: false}).json({
+        return res.status(201).cookie("token",token,{maxAge:1*24*60*60*1000, httpOnly:true, secure:true, sameSite: 'None'}).json({
              message:"User registered successfully",
              success:true,
              token:token
@@ -69,7 +69,7 @@ export const login = async(req,res) =>{
             userId: User._id
         };
         const token = await jwt.sign(tokenData, process.env.JWT_SECRET_KEY,{expiresIn:'1d'});
-        return res.status(200).cookie("token",token,{maxAge:1*24*60*60*1000, httpOnly:true, secure:true, sameSite: false}).json({
+        return res.status(200).cookie("token",token,{maxAge:1*24*60*60*1000, httpOnly:true, secure:true, sameSite: 'None'}).json({
              message:"User Logged in Successfully!",
              success:true,
             _id: User._id,
