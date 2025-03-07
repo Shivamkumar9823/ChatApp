@@ -4,7 +4,6 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { setAuthUser } from '../redux/userSlice';
-import Cookies from 'js-cookie'; 
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -36,7 +35,6 @@ const Login = () => {
       // console.log("login res.data: ",res.data);
       if (res.data.success) {
         toast.success(res.data.message);
-        // console.log("token: ", res.data.token);
         localStorage.setItem("token",res.data.token);
         dispatch(setAuthUser(res.data));
         navigate('/');

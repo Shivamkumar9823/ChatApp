@@ -50,6 +50,7 @@ const Signup = () => {
   );
      if(res.data.success ){
          toast.success(res.data.messsage);
+         localStorage.setItem("token",res.data.token);
          navigate('/');
      }
      console.log("server response : ", res);
