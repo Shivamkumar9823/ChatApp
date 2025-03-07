@@ -61,9 +61,9 @@ const MsgContainer = () => {
 };
 
   return (
-    <div className="w-full flex flex-col bg-gray-100">
+    <div className="w-full h-full flex flex-col bg-gray-100">
       {/* Header */}
-      <div className="bg-gray-900 text-white p-4 flex items-center gap-3 shadow-md">
+      <div className="bg-gray-900 text-white p-4 flex items-center gap-3 shadow-md fixed top-10 left-0 w-full md:static z-10">
         <img
           src={selectedUser ? selectedUser.profilephoto : "https://tse4.mm.bing.net/th?id=OIP.X3npahXqcIVePQAwbpjNVQHaHd&pid=Api&P=0&h=180"}
           alt="User DP"
@@ -78,7 +78,7 @@ const MsgContainer = () => {
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2">
+      <div className="flex-1 overflow-y-auto p-4 space-y-2 mt-[70px] mb-[70px] md:mt-0 md:mb-0 ">
         {messages.map((msg) => (
           <div
             key={msg._id}
@@ -96,7 +96,7 @@ const MsgContainer = () => {
       </div>
 
       {/* Message Input */}
-      <div className="p-4 bg-white shadow-md flex gap-2">
+      <div className="p-4 bg-white shadow-md flex gap-2 fixed bottom-0 left-0 w-full md:static z-10">
         <input
           type="text"
           className="flex-1 p-2 border rounded-md outline-none"

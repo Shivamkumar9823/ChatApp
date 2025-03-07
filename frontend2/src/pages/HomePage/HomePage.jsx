@@ -1,14 +1,34 @@
-import React from 'react'
-import Sidebar from '../../components/Sidebar'
-import Msgcontainer from '../../components/Msgcontainer'
+import React, { useState, useEffect } from "react";
+import Sidebar from "../../components/Sidebar";
+import Msgcontainer from "../../components/Msgcontainer";
 
 const HomePage = () => {
-  return (
-    <div className='flex w-[700px] sm:h-[450px] md:h-[550px] rounded-lg overflow-hidden bg-grey-400 bg-clip-padding backdrop-blur-lg bg-opacity-0'>
-      <Sidebar />
-      <Msgcontainer />
-  </div>
-  )
-}
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
 
-export default HomePage
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const containerStyle = {
+    width: isMobile?"100%":"900px", // Full width on mobile, 900px on larger screens
+    height: "100vh",
+    display: "flex",
+    borderRadius: isMobile ?"0px": "10px",
+    backdropFilter: "blur(10px)",
+    backgroundColor: "rgba(0, 0, 0, 0.3)"
+  };
+
+  return (
+    <div style={containerStyle}>
+      <Sidebar />
+      {!isMobile && <Msgcontainer />}
+    </div>
+  );
+};
+
+export default HomePage;
