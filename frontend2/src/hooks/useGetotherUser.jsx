@@ -21,7 +21,7 @@ const useGetotherUser = () => {
                     headers: { Authorization: `Bearer ${token}` }
                 });
         
-                console.log("otherUsers:", res.data); 
+                console.log("otherUsers:", res.data);   
                 dispatch(setOtherUsers(res.data));
             } catch (error) {
                 console.error("Error fetching users:", error.response?.data || error.message);

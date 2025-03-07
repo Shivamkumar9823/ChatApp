@@ -89,7 +89,7 @@ const Sidebar = () => {
             <ul>
               {otherUsers &&
                 otherUsers.map((user) => {
-                  const isOnline = onlineUsers.includes(user._id);
+                  const isOnline = Array.isArray(onlineUsers) && onlineUsers.includes(user._id);
                   return (
                   <li
                     onClick={() => selectedUserHandler(user)}
