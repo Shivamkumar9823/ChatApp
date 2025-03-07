@@ -1,11 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { act } from "react";
 
-const storedUser = localStorage.getItem("authUser");
 const userSlice = createSlice({
     name : "user",
     initialState:{
-        authUser:storedUser ? JSON.parse(storedUser) : null,
+        authUser:null,
         otherUsers:null,
         selectedUser:null,
         onlineUsers:null,

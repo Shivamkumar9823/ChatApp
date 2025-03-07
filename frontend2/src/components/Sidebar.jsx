@@ -35,6 +35,7 @@ const Sidebar = () => {
       const res = await axios.get(`${API_URL}/api/v1/user/logout`);
       navigate("/login");
       dispatch(setAuthUser(null));
+      localStorage.removeItem("_id");
       toast.success(res.data.message);
     } catch (error) {
       console.error(error);
