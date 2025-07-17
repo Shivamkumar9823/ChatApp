@@ -18,12 +18,22 @@ function App() {
   // console.log("authUser: ",authUser)
    const [token, setToken] = useState(localStorage.getItem("token"));
 
-  // Update token when route changes
   useEffect(() => {
-    const currentToken = localStorage.getItem("token");
-    setToken(currentToken || null);
+    const checkToken = () => {
+      const t = localStorage.getItem("token");
+      setToken(t);
+    };
+
+    checkToken(); // Initial check
+    window.addEventListener("storage", checkToken); // Listen for token changes
+
+    return () => {
+      window.removeEventListener("storage", checkToken);
+    };
   }, [location]);
 
+
+  
   useEffect(() => {
     if (socket) {
       socket.on("onlineUsers", (users) => {
