@@ -1,17 +1,28 @@
 import { useEffect, useState } from "react";
 import { useSelector,useDispatch} from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes,useLocation  } from "react-router-dom";
 import Signup from "./components/Signup.jsx";
 import HomePage from "./pages/HomePage/HomePage.jsx";
 import Login from "./components/Login.jsx";
 import { useSocket } from "./storeContext/SocketContext.jsx";
 import { setOnlineUsers } from "./redux/userSlice.js";
+import LandingPage from "./components/LandingPage.jsx";
+import Cookies from 'js-cookie';
+
 
 function App() {
   const socket = useSocket(); 
   const dispatch = useDispatch();
-  const { authUser } = useSelector((store) => store.user);
+   const location = useLocation();
+  // const { authUser } = useSelector((store) => store.user);
   // console.log("authUser: ",authUser)
+   const [token, setToken] = useState(localStorage.getItem("token"));
+
+  // Update token when route changes
+  useEffect(() => {
+    const currentToken = localStorage.getItem("token");
+    setToken(currentToken || null);
+  }, [location]);
 
   useEffect(() => {
     if (socket) {
@@ -32,7 +43,7 @@ function App() {
   return (
     <div className="app p-0 h-screen flex items-center justify-center">
       <Routes>
-        <Route path="/" element={<HomePage socket={socket} />} />
+        <Route path="/" element={ token ? (<HomePage socket={socket}/>):( <LandingPage />)} />
         <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
       </Routes>

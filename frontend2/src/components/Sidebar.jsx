@@ -38,6 +38,7 @@ const Sidebar = () => {
       navigate("/login");
       dispatch(setAuthUser(null));
       localStorage.removeItem("_id");
+      localStorage.removeItem("token");
       toast.success(res.data.message);
     } catch (error) {
       console.error(error);
@@ -86,28 +87,32 @@ const Sidebar = () => {
 
           {/* Other Users List */}
           <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
-            <ul>
-              {otherUsers &&
-                otherUsers.map((user) => {
-                  const isOnline = Array.isArray(onlineUsers) && onlineUsers.includes(user._id);
-                  return (
-                  <li
-                    onClick={() => selectedUserHandler(user)}
-                    key={user._id}
-                    className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer 
-                    ${selectedUserId === user._id ? "bg-white text-gray-900" : "hover:bg-gray-800"}`}
-                  >
-                    <div className="relative">
-                        <img src={user.profilephoto} alt={user.fullname} className="w-12 h-12 rounded-full object-cover" />
-                        {isOnline && ( // ✅ Show green circle when user is online
-                          <span className="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-gray-900 rounded-full"></span>
-                        )}
-                    </div>
-                    <span className="text-lg">{user.fullname}</span>
-                  </li>
-)})}
-            </ul>
-          </div>
+  {otherUsers && otherUsers.length > 0 ? (
+    <ul>
+      {otherUsers.map((user) => {
+        const isOnline = Array.isArray(onlineUsers) && onlineUsers.includes(user._id);
+        return (
+          <li
+            onClick={() => selectedUserHandler(user)}
+            key={user._id}
+            className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer 
+            ${selectedUserId === user._id ? "bg-white text-gray-900" : "hover:bg-gray-800"}`}
+          >
+            <div className="relative">
+              <img src={user.profilephoto} alt={user.fullname} className="w-12 h-12 rounded-full object-cover" />
+              {isOnline && (
+                <span className="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-gray-900 rounded-full"></span>
+              )}
+            </div>
+            <span className="text-lg">{user.fullname}</span>
+          </li>
+        );
+      })}
+    </ul>
+  ) : (
+    <p className="text-gray-500 text-center">No users available.</p>
+  )}
+</div>
 
           {/* Logout Button */}
           <div className="mt-auto">
