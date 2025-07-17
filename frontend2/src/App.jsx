@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
 import { useSelector,useDispatch} from "react-redux";
 import { Route, Routes,useLocation  } from "react-router-dom";
 import Signup from "./components/Signup.jsx";
@@ -13,24 +13,47 @@ import Cookies from 'js-cookie';
 function App() {
   const socket = useSocket(); 
   const dispatch = useDispatch();
-   const location = useLocation();
+  const location = useLocation();
   // const { authUser } = useSelector((store) => store.user);
   // console.log("authUser: ",authUser)
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  //   const [token, setToken] = useState(() => localStorage.getItem("token"));
 
-  useEffect(() => {
-    const handleStorage = () => {
-      setToken(localStorage.getItem("token"));
-    };
+  // useEffect(() => {
+  //   const handleStorage = () => {
+  //     setToken(localStorage.getItem("token"));
+  //   };
 
-    // check on mount
-    handleStorage();
+  //   // check on mount
+  //   handleStorage();
 
-    // listen for token changes
-    window.addEventListener("storage", handleStorage);
+  //   // listen for token changes
+  //   window.addEventListener("storage", handleStorage);
 
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
+  //   return () => window.removeEventListener("storage", handleStorage);
+  // }, []);
+const [isLoggedIn, setIsLoggedIn] = useState(() => {
+  return !!localStorage.getItem("_id");
+});
+
+useEffect(() => {
+  const handleStorageChange = () => {
+    const userId = localStorage.getItem("_id");
+    setIsLoggedIn(!!userId);
+  };
+
+  // Trigger on first render
+  handleStorageChange();
+
+  // Listen to storage changes across tabs
+  window.addEventListener("storage", handleStorageChange);
+
+  return () => {
+    window.removeEventListener("storage", handleStorageChange);
+  };
+}, [location]); // rerun if route changes
+
+
+
 
 
   useEffect(() => {
@@ -52,7 +75,7 @@ function App() {
   return (
     <div className="app p-0 h-screen flex items-center justify-center">
       <Routes>
-        <Route path="/" element={ token ? (<HomePage socket={socket}/>):( <LandingPage />)} />
+        <Route path="/" element={ isLoggedIn ? (<HomePage socket={socket}/>):( <LandingPage />)} />
         <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
       </Routes>
