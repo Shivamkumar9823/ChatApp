@@ -16,24 +16,23 @@ function App() {
    const location = useLocation();
   // const { authUser } = useSelector((store) => store.user);
   // console.log("authUser: ",authUser)
-   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
 
   useEffect(() => {
-    const checkToken = () => {
-      const t = localStorage.getItem("token");
-      setToken(t);
+    const handleStorage = () => {
+      setToken(localStorage.getItem("token"));
     };
 
-    checkToken(); // Initial check
-    window.addEventListener("storage", checkToken); // Listen for token changes
+    // check on mount
+    handleStorage();
 
-    return () => {
-      window.removeEventListener("storage", checkToken);
-    };
-  }, [location]);
+    // listen for token changes
+    window.addEventListener("storage", handleStorage);
+
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
 
 
-  
   useEffect(() => {
     if (socket) {
       socket.on("onlineUsers", (users) => {
