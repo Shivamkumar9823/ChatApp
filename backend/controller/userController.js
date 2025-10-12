@@ -23,7 +23,7 @@ export const register = async(req,res) =>{
         const hashedPassword = await bcrypt.hash(password,10);
         //profile photo
         const malephoto = `https://avatar.iran.liara.run/public/boy?username=${username}`;
-        const femalephoto = `https://avatar.iran.liara.run/public/boy?username=${username}`;
+        const femalephoto = `https://avatar.iran.liara.run/public/girl?username=${username}`;
         const newUser = await user.create({
             fullname,
             username,
@@ -33,7 +33,7 @@ export const register = async(req,res) =>{
         })
         
         const newuser =  await newUser.save();
-        const token = jwt.sign({id: newuser._id}, process.env.JWT_SECRET_KEY);
+        const token = jwt.sign({id: newuser._id}, process.env.JWT_SECRET_KEY,{expiresIn:'1d'});
         return res.status(201).cookie("token",token,{maxAge:1*24*60*60*1000, httpOnly:true, secure:true, sameSite: 'None'}).json({
              message:"User registered successfully",
              success:true,
@@ -69,7 +69,7 @@ export const login = async(req,res) =>{
             userId: User._id
         };
         const token = await jwt.sign(tokenData, process.env.JWT_SECRET_KEY,{expiresIn:'1d'});
-        return res.status(200).cookie("token",token,{maxAge:1*24*60*60*1000, httpOnly:true, secure:true, sameSite: 'None'}).json({
+        return res.status(200).cookie("token",token,{maxAge:1*12*60*60*1000, httpOnly:true, secure:true, sameSite: 'None'}).json({
              message:"User Logged in Successfully!",
              success:true,
             _id: User._id,
